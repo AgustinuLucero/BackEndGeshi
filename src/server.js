@@ -14,12 +14,14 @@ const contractRutes = require('./routes/contractRoutes');
 const activityRoutes = require('./routes/activityRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const searchRoutes = require('./routes/searchRoutes');
 
 //conectar las rutas
 app.use('/api/contracts',contractRutes);
 app.use('/api/activities',activityRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/search', searchRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'API funcionando. Usa las rutas /api/...' });
