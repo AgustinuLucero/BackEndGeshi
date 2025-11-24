@@ -12,7 +12,7 @@ const upload = require('../middleware/upload');
 router.get('/', checkAuth ,getAllContracts);
 router.get('/my-contracts', checkAuth ,getMyContracts);
 router.post('/',checkAuth,createContract);
-router.post('/upload-report', checkAuth, upload.single('pdfFile'), uploadReport);
+router.post('/upload-report', checkAuth, upload.single('pdfFile'), uploadContractReport);
 
 
 
