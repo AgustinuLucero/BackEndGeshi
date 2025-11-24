@@ -3,10 +3,10 @@ const supabase = require('../config/supabase');
 //creo un nuevo usuario
 const createUser = async(req,res)=>{
     try{
-        const {password,nombre,cuil,mail} = req.body;
+        const {password,nombre,cuil,email} = req.body;
 
         const{data:authData,error:authError} = await supabase.auth.admin.createUser({
-            mail: mail,  
+            email: email,  
             password: password,
             mailConfirm: true
         });
@@ -24,7 +24,7 @@ const createUser = async(req,res)=>{
                 id: idUser,
                 cuil: cuil,
                 nombre: nombre,
-                mail: mail
+                mail: email
             }
         ]);
 
