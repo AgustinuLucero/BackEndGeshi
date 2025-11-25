@@ -47,4 +47,27 @@ const getActivitiesByContract = async (req, res) => {
     }
 };
 
-module.exports = { createActivity,getActivitiesByContract };
+const toggleActivityStatus = async(req,res) =>{
+    try{
+        const { activityId } = req.params;
+        const { completado } = req.body;
+
+        const { data, error } = await supabase
+            .from('Actividades')
+            .update({ completado: completado })
+            .eq('id', activityId)
+            .select();
+
+        if(error){
+            throw error;
+        }
+
+        res.json({message: 'Estado actualizado', data: data[0]});
+
+
+    }catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+module.exports = { createActivity,getActivitiesByContract, toggleActivityStatus };

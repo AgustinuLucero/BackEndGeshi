@@ -17,17 +17,17 @@ const globalSearch = async(req,res) =>{
             //busco en clientes
             supabase.from('Clientes')
             .select('*')
-            .or(`nombre.ilike.${searchTerm},cuil.ilike.${searchTerm}`), //ilike para que no importen mayusculas o minusculas
+            .or(`nombre.ilike.${searchTerm},mail.ilike.${searchTerm}`), //ilike para que no importen mayusculas o minusculas
 
             //busco en contratos
             supabase.from('Contratos')
-            .select('*, Clientes(nombre)')
-            .ilike('id',searchTerm),
+            .select('*, Clientes!usuario(nombre)')
+            .ilike('modulos',searchTerm),
 
             //busco en actividades
             supabase.from('Actividades')
-            .select('*, Contratos(Contratos())')
-            .ilike('descripcion', searchTerm)
+            .select('*, Contratos!contrato_id(modulos)')
+            .ilike('nombre', searchTerm)
         ]);
 
         //armo la respuesta combinada
@@ -41,6 +41,7 @@ const globalSearch = async(req,res) =>{
         });
 
     }catch(error){
+        console.error("Search Error:", error.message);
         res.status(500).json({ error: error.message });
     }
 }
