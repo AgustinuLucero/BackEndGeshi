@@ -18,7 +18,7 @@ const createContract = async(req,res)=>{
         .insert([
             {
                 usuario: usuario_id,
-                modulo: modulos,
+                modulos: modulos,
                 inicio: inicio, 
                 fin:fin
                 

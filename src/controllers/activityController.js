@@ -11,9 +11,9 @@ const createActivity = async(req,res) =>{
         const { data, error } = await supabase
             .from('Actividades')
             .insert([{ 
-                contrato_id: contratoId, 
-                descripcion: descripcion,
-                completada: false
+                id_contrato: contratoId, 
+                nombre: descripcion,
+                completado: false
             }]);
 
         if (error) throw error;
@@ -36,8 +36,8 @@ const getActivitiesByContract = async (req, res) => {
         const { data, error } = await supabase
             .from('Actividades')
             .select('*') // Traemos todas las columnas de las tareas
-            .eq('contrato_id', contractId) // Filtramos por el ID del contrato
-            .order('created_at', { ascending: true }); // Opcional: ordenar por fecha de creación
+            .eq('id_contrato', contractId) // Filtramos por el ID del contrato
+            .order('id', { ascending: true }); // Opcional: ordenar por fecha de creación
 
         if (error) throw error;
 
