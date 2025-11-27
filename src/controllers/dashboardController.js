@@ -50,4 +50,38 @@ const getDashboardStats = async(req,res) =>{
 
 }
 
-module.exports = {getDashboardStats};
+const  getClientsStats = async (req,res)=>{
+    try{
+        const userId = req.user.id;
+
+        //cuento los contratos del usuario
+        const contratos = await supabase.from('Contratos')
+        .select('id', {count: 'exact', head: true})
+        .eq('usuario', userId)
+
+        //contar actividades pendientes
+        const pendientes = await supabase.from('Actividades')
+        .select('id, Contratos!inner(usuario)', {count: 'exact', head: true})
+        .eq('Contratos.usuario', userId)
+
+        //contar actividades listos
+        const completadas = await supabase.from('Actividades')
+        .select('id, Contratos!inner(usuario)', {count: 'exact', head: true})
+        .eq('Contratos.usuario', userId)
+        .eq('completado', true);
+
+        res.json({
+            totalContratos: contratos.count,
+            tareasPendientes: pendientes.count,
+            tareasListas: completadas.count
+        });
+
+    }catch(err){
+        res.status(500).json({ error: error.message });
+    }
+    
+
+}
+
+
+module.exports = {getDashboardStats, getClientsStats};

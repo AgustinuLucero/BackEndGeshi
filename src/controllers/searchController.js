@@ -26,7 +26,7 @@ const globalSearch = async(req,res) =>{
 
             //busco en actividades
             supabase.from('Actividades')
-            .select('*, Contratos!contrato_id(modulos)')
+            .select('id, nombre, Contratos!contrato_id(modulos)')
             .ilike('nombre', searchTerm)
         ]);
 
