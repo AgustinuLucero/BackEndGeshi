@@ -3,12 +3,15 @@ const supabase = require('../config/supabase');
 const globalSearch = async(req,res) =>{
     try{
         //obtener el termino de la busqueda de la url
+        
         const{q} = req.query;
 
         if(!q){
             return res.status(400).json({error: 'Por favor ingresa un termino de busqueda'});
         }
 
+        const isNumeric = !isNaN(q) && isFinite(q); 
+        const numberQuery = isNumeric ? parseInt(q, 10) : 0;
         //preparo el termino para la busqueda parcial como texto
         const searchTerm = `%${q}%`;
 
@@ -21,12 +24,14 @@ const globalSearch = async(req,res) =>{
 
             //busco en contratos
             supabase.from('Contratos')
-            .select('*, Clientes!usuario(nombre)')
-            .ilike('modulos',searchTerm),
+                .select('id, modulos, Clientes!usuario(nombre)')
+                .or(
+                    isNumeric ? `modulos.eq.${numberQuery}` : `modulos.ilike.${searchTerm}`
+                ),
 
             //busco en actividades
             supabase.from('Actividades')
-            .select('id, nombre, Contratos!contrato_id(modulos)')
+            .select('id, nombre, Contratos(id)')
             .ilike('nombre', searchTerm)
         ]);
 
