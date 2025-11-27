@@ -1,6 +1,7 @@
 const supabase = require('../config/supabase');
 
 const createActivity = async(req,res) =>{
+    
     try {
         const { contratoId, descripcion } = req.body;
 
@@ -47,6 +48,27 @@ const getActivitiesByContract = async (req, res) => {
     }
 };
 
+const getMyActivities = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        //busco acyividades donde el contrato tenga asociado al dueño o sea el usuario
+        const { data, error } = await supabase
+            .from('Actividades')
+            .select('id, nombre, completado,  Contratos(usuario, modulos)') // serian los datos
+            .eq('Contratos.usuario', userId) // filtro por usuario
+            .order('id', { ascending: true });
+
+        if (error) throw error;
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        console.error("Error getMyActivities:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const toggleActivityStatus = async(req,res) =>{
     try{
         const { activityId } = req.params;
@@ -70,4 +92,4 @@ const toggleActivityStatus = async(req,res) =>{
     }
 }
 
-module.exports = { createActivity,getActivitiesByContract, toggleActivityStatus };
+module.exports = { createActivity,getActivitiesByContract,getMyActivities ,toggleActivityStatus };
