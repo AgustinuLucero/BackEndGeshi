@@ -41,7 +41,7 @@ const getActivitiesByContract = async (req, res) => {
                 nombre, 
                 completado, 
                 id_contrato, 
-                Contratos!id_contrato!inner(usuario, modulos)
+                Contratos!id_contrato!inner(usuario, modulos, inicio, fin)
             `) // Traemos todas las columnas de las tareas
             .eq('id_contrato', contractId) // Filtramos por el ID del contrato
             .order('id', { ascending: true }); // Opcional: ordenar por fecha de creación
@@ -62,7 +62,13 @@ const getMyActivities = async (req, res) => {
         //busco acyividades donde el contrato tenga asociado al dueño o sea el usuario
         const { data, error } = await supabase
             .from('Actividades')
-            .select('id, nombre, completado,  Contratos(usuario, modulos)') // serian los datos
+            .select(`
+                id, 
+                nombre, 
+                completado, 
+                id_contrato, 
+                Contratos!id_contrato!inner(usuario, modulos, inicio, fin)
+            `)
             .eq('Contratos.usuario', userId) // filtro por usuario
             .order('id', { ascending: true });
 
