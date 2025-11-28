@@ -36,7 +36,13 @@ const getActivitiesByContract = async (req, res) => {
 
         const { data, error } = await supabase
             .from('Actividades')
-            .select('*') // Traemos todas las columnas de las tareas
+            .select(`
+                id, 
+                nombre, 
+                completado, 
+                id_contrato, 
+                Contratos!id_contrato!inner(usuario, modulos)
+            `) // Traemos todas las columnas de las tareas
             .eq('id_contrato', contractId) // Filtramos por el ID del contrato
             .order('id', { ascending: true }); // Opcional: ordenar por fecha de creación
 
