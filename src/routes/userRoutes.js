@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const {createUser,getAllUsers ,deleteUser} = require('../controllers/userController');
 
 const {checkAuth} = require('../middleware/authMiddleware');
 
 //veo que sea un admin y ejecuto la funcion de crear un usuario y obtenerlos
-router.post('/',checkAuth, userController.createUser);
+router.post('/',checkAuth, createUser);
 
-router.get('/',checkAuth,userController.getAllUsers);
+router.get('/',checkAuth, getAllUsers);
+
+router.delete('/:userId', checkAuth, deleteUser);
+
+
 
 module.exports = router;

@@ -36,6 +36,32 @@ const createUser = async(req,res)=>{
     }
 }
 
+//elimino el usuario
+const deleteUser = async (req, res) => {
+    try {
+        const { userId } = req.params; // recibo el id
+
+        // borro de la tabla clientes
+        const { error: profileError } = await supabase
+            .from('Clientes')
+            .delete()
+            .eq('id', userId);
+
+        if (profileError) throw profileError;
+
+        // borrar el login
+        const { error: authError } = await supabase.auth.admin.deleteUser(userId);
+        
+        if (authError) throw authError;
+
+        res.status(200).json({ message: "Usuario eliminado correctamente" });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+//traigo a los usuarios
 const getAllUsers = async(req,res)=>{
     try{
         const{data,error} = await supabase
@@ -54,4 +80,4 @@ const getAllUsers = async(req,res)=>{
 
 
 
-module.exports = {createUser, getAllUsers};
+module.exports = {createUser, getAllUsers, deleteUser};

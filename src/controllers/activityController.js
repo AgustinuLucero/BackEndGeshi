@@ -48,6 +48,7 @@ const getActivitiesByContract = async (req, res) => {
 
         if (error) throw error;
 
+        console.log("ACTIVIDADES OBTENIDAS:\n", JSON.stringify(data, null, 2));
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
