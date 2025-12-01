@@ -24,14 +24,14 @@ const loginUser = async(req,res)=>{
                 return res.status(401).json({ error: 'CUIL no encontrado o no registrado.' });
             }
             
-            // Asignamos el email encontrado para el login
+            // asigno el email encontrado para el login
             loginEmail = userProfile.mail;
         }
         
 
         //login con mail
         const { data, error } = await supabase.auth.signInWithPassword({
-            email: loginEmail, // Usamos el email encontrado o el email que vino directo
+            email: loginEmail, // uso el email encontrado o el email que vino directo
             password: password
         });
 

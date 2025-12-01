@@ -36,7 +36,7 @@ const createContract = async(req,res)=>{
     }
 }
 
-//obtener contratos
+//obtener contratos para administrador
 const getAllContracts = async(req, res) =>{
     try{
         const { data, error } = await supabase
@@ -51,7 +51,7 @@ const getAllContracts = async(req, res) =>{
     }
 }
 
-
+//traigo los contratos de una persona, o sea el cliente
 const getMyContracts = async(req,res)=>{
     try{
         const userId = req.user.id;
@@ -69,6 +69,7 @@ const getMyContracts = async(req,res)=>{
     }
 };
 
+// para subir pdf del contrato
 const uploadContractReport = async (req, res) => {
     try {
         const { contratoId } = req.body; 
@@ -79,7 +80,8 @@ const uploadContractReport = async (req, res) => {
         }
 
         // lo subo al storage
-        const fileName = `contrato-${contratoId}-${Date.now()}.pdf`;
+        const fileName = `contrato-${contratoId}-${Date.now()}.pdf`; // le asigno un nombre unico para evitar sobreescrituras
+        
         const { error: uploadError } = await supabase.storage
             .from('informes')
             .upload(fileName, file.buffer, { contentType: file.mimetype });
@@ -87,7 +89,7 @@ const uploadContractReport = async (req, res) => {
         if (uploadError) throw uploadError;
 
         // obtengo la url
-        const { data: urlData } = supabase.storage.from('informes').getPublicUrl(fileName);
+        const { data: urlData } = supabase.storage.from('informes').getPublicUrl(fileName); 
         const fileUrl = urlData.publicUrl;
 
         // con el nuevo URL actualizo la tabla contratos con el url

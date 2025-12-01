@@ -3,7 +3,6 @@ const supabase = require('../config/supabase');
 const globalSearch = async(req,res) =>{
     try{
         //obtener el termino de la busqueda de la url
-        
         const{q} = req.query;
 
         if(!q){
@@ -12,6 +11,7 @@ const globalSearch = async(req,res) =>{
 
         const isNumeric = !isNaN(q) && isFinite(q); 
         const numberQuery = isNumeric ? parseInt(q, 10) : 0;
+        
         //preparo el termino para la busqueda parcial como texto
         const searchTerm = `%${q}%`;
 
