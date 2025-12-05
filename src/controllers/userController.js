@@ -8,7 +8,7 @@ const createUser = async(req,res)=>{
         const{data:authData,error:authError} = await supabase.auth.admin.createUser({
             email: email,  
             password: password,
-            mailConfirm: true
+            email_confirm: true
         });
 
         if(authError) throw authError;
